@@ -75,7 +75,7 @@ Eigen::MatrixXd functions::quaternionConv2R(double ANGLE, int x, int y, int z) {
 Eigen::MatrixXd functions::predefinedTransformation(Eigen::MatrixXd points, Eigen::MatrixXd R, int translation[3]) {
 	Eigen::MatrixXd pointsNew = points * R;
 
-	for (int i = 1; i < pointsNew.rows(); i++) {
+	for (int i = 0; i < pointsNew.rows(); i++) {
 		pointsNew(i, 0) += translation[0];
 		pointsNew(i, 1) -= translation[1];
 		pointsNew(i, 2) += translation[2];
@@ -93,7 +93,7 @@ Eigen::MatrixXd functions::centroidFinding(Eigen::MatrixXd points, Eigen::Matrix
 	double sum_2y = 0;
 	double sum_2z = 0;
 
-	for (int i = 1; i < points.rows(); i++) {
+	for (int i = 0; i < points.rows(); i++) {
 		sum_1x += points(i, 0);
 		sum_1y += points(i, 1);
 		sum_1z += points(i, 2);
@@ -133,7 +133,7 @@ Eigen::MatrixXd functions::findH(Eigen::MatrixXd points, Eigen::MatrixXd pointsN
 	Eigen::MatrixXd a = Eigen::MatrixXd::Constant(3, 1, 0);
 	Eigen::MatrixXd b = Eigen::MatrixXd::Constant(1, 3, 0);
 
-	for (int i = 1; i < points.rows(); i++) {
+	for (int i = 0; i < points.rows(); i++) {
 		diff1(i, 0) = points(i, 0) - centroids(0, 0); //x
 		diff1(i, 1) = points(i, 1) - centroids(0, 1); // y
 		diff1(i, 2) = points(i, 2) - centroids(0, 2); // z
@@ -295,7 +295,8 @@ std::vector<Eigen::MatrixXd> functions::receivingloop(SOCKET in, int pcln) {
 		}
 
 		//Step3: Convert the bufDoublevect into an Eigen matrix
-		Eigen::MatrixXd bufMatrix(3, 3);
+		int pointsets = bufDoublevect.size() / 3;
+		Eigen::MatrixXd bufMatrix(pointsets, 3);
 		int counter = 0;
 
 		for (int k = 0; k < bufMatrix.rows(); k++) {
